@@ -5,11 +5,38 @@ const isInteger = (n: number): boolean => {
   return n % 1 === 0;
 };
 
+/**
+ * Statistical calculation utilities
+ * 
+ * Provides methods for calculating various statistical measures
+ * including central tendency, dispersion, and correlation.
+ * 
+ * @example
+ * ```typescript
+ * // Basic statistics
+ * Stats.mean([1, 2, 3, 4, 5]); // → 3
+ * Stats.median([1, 2, 3, 4, 5]); // → 3
+ * Stats.stdDev([1, 2, 3, 4, 5]); // → 1.58...
+ * 
+ * // All statistics at once
+ * Stats.all([1, 2, 3, 4, 5]); // → { mean: 3, median: 3, mode: [1,2,3,4,5], ... }
+ * ```
+ */
 export class Stats {
   /**
    * Calculate mean (average) of an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Mean of the array
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.mean([1, 2, 3, 4, 5]); // → 3
+   * Stats.mean([10, 20, 30]); // → 20
+   * ```
    */
-  static Mean(arr: number[]): number {
+  public static mean(arr: number[]): number {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
@@ -20,8 +47,18 @@ export class Stats {
 
   /**
    * Calculate median of an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Median of the array
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.median([1, 2, 3, 4, 5]); // → 3
+   * Stats.median([1, 2, 3, 4]); // → 2.5
+   * ```
    */
-  static Median(arr: number[]): number {
+  public static median(arr: number[]): number {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
@@ -38,8 +75,18 @@ export class Stats {
 
   /**
    * Calculate mode of an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Mode(s) of the array (single number or array of numbers)
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.mode([1, 2, 2, 3]); // → 2
+   * Stats.mode([1, 2, 3, 4]); // → [1, 2, 3, 4] (all values are modes)
+   * ```
    */
-  static Mode(arr: number[]): number | number[] {
+  public static mode(arr: number[]): number | number[] {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
@@ -60,8 +107,18 @@ export class Stats {
 
   /**
    * Calculate range of an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Range (max - min) of the array
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.range([1, 2, 3, 4, 5]); // → 4
+   * Stats.range([10, 5, 15, 8]); // → 10
+   * ```
    */
-  static Range(arr: number[]): number {
+  public static range(arr: number[]): number {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
@@ -73,66 +130,116 @@ export class Stats {
 
   /**
    * Calculate standard deviation of an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Population standard deviation
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.stdDev([1, 2, 3, 4, 5]); // → 1.58...
+   * Stats.stdDev([10, 20, 30]); // → 8.16...
+   * ```
    */
-  static StdDev(arr: number[]): number {
+  public static stdDev(arr: number[]): number {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
 
     if (arr.length === 1) return 0;
 
-    const mean = Stats.Mean(arr);
+    const mean = Stats.mean(arr);
     const variance = arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / arr.length;
     return Math.sqrt(variance);
   }
 
   /**
    * Calculate sample standard deviation of an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Sample standard deviation (using n-1 denominator)
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.sampleStdDev([1, 2, 3, 4, 5]); // → 1.58...
+   * Stats.sampleStdDev([10, 20, 30]); // → 10
+   * ```
    */
-  static SampleStdDev(arr: number[]): number {
+  public static sampleStdDev(arr: number[]): number {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
 
     if (arr.length === 1) return 0;
 
-    const mean = Stats.Mean(arr);
+    const mean = Stats.mean(arr);
     const variance = arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / (arr.length - 1);
     return Math.sqrt(variance);
   }
 
   /**
    * Calculate variance of an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Population variance
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.variance([1, 2, 3, 4, 5]); // → 2
+   * Stats.variance([10, 20, 30]); // → 66.67...
+   * ```
    */
-  static Variance(arr: number[]): number {
+  public static variance(arr: number[]): number {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
 
     if (arr.length === 1) return 0;
 
-    const mean = Stats.Mean(arr);
+    const mean = Stats.mean(arr);
     return arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / arr.length;
   }
 
   /**
    * Calculate sample variance of an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Sample variance (using n-1 denominator)
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.sampleVariance([1, 2, 3, 4, 5]); // → 2.5
+   * Stats.sampleVariance([10, 20, 30]); // → 100
+   * ```
    */
-  static SampleVariance(arr: number[]): number {
+  public static sampleVariance(arr: number[]): number {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
 
     if (arr.length === 1) return 0;
 
-    const mean = Stats.Mean(arr);
+    const mean = Stats.mean(arr);
     return arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / (arr.length - 1);
   }
 
   /**
    * Calculate sum of an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Sum of all numbers in the array
+   * @throws {MathterError} When input is not an array
+   * 
+   * @example
+   * ```typescript
+   * Stats.sum([1, 2, 3, 4, 5]); // → 15
+   * Stats.sum([10, 20, 30]); // → 60
+   * ```
    */
-  static Sum(arr: number[]): number {
+  public static sum(arr: number[]): number {
     if (!Array.isArray(arr)) {
       throw new MathterError('Input must be an array', 'INVALID_INPUT');
     }
@@ -142,8 +249,18 @@ export class Stats {
 
   /**
    * Calculate product of an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Product of all numbers in the array
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.product([1, 2, 3, 4, 5]); // → 120
+   * Stats.product([2, 3, 4]); // → 24
+   * ```
    */
-  static Product(arr: number[]): number {
+  public static product(arr: number[]): number {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
@@ -153,8 +270,18 @@ export class Stats {
 
   /**
    * Find minimum value in an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Minimum value in the array
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.min([1, 2, 3, 4, 5]); // → 1
+   * Stats.min([10, 5, 15, 8]); // → 5
+   * ```
    */
-  static Min(arr: number[]): number {
+  public static min(arr: number[]): number {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
@@ -164,8 +291,18 @@ export class Stats {
 
   /**
    * Find maximum value in an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Maximum value in the array
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.max([1, 2, 3, 4, 5]); // → 5
+   * Stats.max([10, 5, 15, 8]); // → 15
+   * ```
    */
-  static Max(arr: number[]): number {
+  public static max(arr: number[]): number {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
@@ -175,8 +312,17 @@ export class Stats {
 
   /**
    * Calculate quartiles of an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Object containing Q1, Q2 (median), and Q3 quartiles
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.quartiles([1, 2, 3, 4, 5, 6, 7, 8, 9]); // → { q1: 2.5, q2: 5, q3: 7.5 }
+   * ```
    */
-  static Quartiles(arr: number[]): { q1: number; q2: number; q3: number } {
+  public static quartiles(arr: number[]): { q1: number; q2: number; q3: number } {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
@@ -184,17 +330,17 @@ export class Stats {
     const sorted = [...arr].sort((a, b) => a - b);
     const n = sorted.length;
 
-    const q2 = Stats.Median(sorted);
+    const q2 = Stats.median(sorted);
 
     let q1: number;
     let q3: number;
 
     if (n % 2 === 0) {
-      q1 = Stats.Median(sorted.slice(0, n / 2));
-      q3 = Stats.Median(sorted.slice(n / 2));
+      q1 = Stats.median(sorted.slice(0, n / 2));
+      q3 = Stats.median(sorted.slice(n / 2));
     } else {
-      q1 = Stats.Median(sorted.slice(0, Math.floor(n / 2)));
-      q3 = Stats.Median(sorted.slice(Math.floor(n / 2) + 1));
+      q1 = Stats.median(sorted.slice(0, Math.floor(n / 2)));
+      q3 = Stats.median(sorted.slice(Math.floor(n / 2) + 1));
     }
 
     return { q1, q2, q3 };
@@ -202,16 +348,36 @@ export class Stats {
 
   /**
    * Calculate interquartile range (IQR)
+   * 
+   * @param arr - Array of numbers
+   * @returns Interquartile range (Q3 - Q1)
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.iqr([1, 2, 3, 4, 5, 6, 7, 8, 9]); // → 5
+   * ```
    */
-  static IQR(arr: number[]): number {
-    const quartiles = Stats.Quartiles(arr);
+  public static iqr(arr: number[]): number {
+    const quartiles = Stats.quartiles(arr);
     return quartiles.q3 - quartiles.q1;
   }
 
   /**
    * Calculate correlation coefficient between two arrays
+   * 
+   * @param x - First array of numbers
+   * @param y - Second array of numbers
+   * @returns Pearson correlation coefficient (-1 to 1)
+   * @throws {MathterError} When arrays are invalid or have different lengths
+   * 
+   * @example
+   * ```typescript
+   * Stats.correlation([1, 2, 3, 4, 5], [2, 4, 6, 8, 10]); // → 1 (perfect positive correlation)
+   * Stats.correlation([1, 2, 3, 4, 5], [5, 4, 3, 2, 1]); // → -1 (perfect negative correlation)
+   * ```
    */
-  static Correlation(x: number[], y: number[]): number {
+  public static correlation(x: number[], y: number[]): number {
     if (!Array.isArray(x) || !Array.isArray(y)) {
       throw new MathterError('Both inputs must be arrays', 'INVALID_INPUT');
     }
@@ -221,8 +387,8 @@ export class Stats {
     }
 
     const n = x.length;
-    const meanX = Stats.Mean(x);
-    const meanY = Stats.Mean(y);
+    const meanX = Stats.mean(x);
+    const meanY = Stats.mean(y);
 
     let numerator = 0;
     let sumXSquared = 0;
@@ -245,22 +411,43 @@ export class Stats {
 
   /**
    * Calculate all basic statistics for an array
+   * 
+   * @param arr - Array of numbers
+   * @returns Object containing all basic statistics
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.all([1, 2, 3, 4, 5]); // → { mean: 3, median: 3, mode: [1,2,3,4,5], range: 4, standardDeviation: 1.58..., variance: 2 }
+   * ```
    */
-  static All(arr: number[]): StatsResult {
+  public static all(arr: number[]): StatsResult {
     return {
-      mean: Stats.Mean(arr),
-      median: Stats.Median(arr),
-      mode: Stats.Mode(arr),
-      range: Stats.Range(arr),
-      standardDeviation: Stats.StdDev(arr),
-      variance: Stats.Variance(arr)
+      mean: Stats.mean(arr),
+      median: Stats.median(arr),
+      mode: Stats.mode(arr),
+      range: Stats.range(arr),
+      standardDeviation: Stats.stdDev(arr),
+      variance: Stats.variance(arr)
     };
   }
 
   /**
    * Calculate z-score for a value
+   * 
+   * @param value - Value to calculate z-score for
+   * @param mean - Mean of the distribution
+   * @param stdDev - Standard deviation of the distribution
+   * @returns Z-score (standard score)
+   * @throws {MathterError} When standard deviation is zero
+   * 
+   * @example
+   * ```typescript
+   * Stats.zScore(85, 80, 5); // → 1
+   * Stats.zScore(70, 80, 5); // → -2
+   * ```
    */
-  static ZScore(value: number, mean: number, stdDev: number): number {
+  public static zScore(value: number, mean: number, stdDev: number): number {
     if (stdDev === 0) {
       throw new MathterError('Standard deviation cannot be zero', 'ZERO_STDDEV');
     }
@@ -269,8 +456,19 @@ export class Stats {
 
   /**
    * Calculate percentile rank of a value in an array
+   * 
+   * @param arr - Array of numbers
+   * @param value - Value to find percentile rank for
+   * @returns Percentile rank (0-100)
+   * @throws {MathterError} When input is not a non-empty array
+   * 
+   * @example
+   * ```typescript
+   * Stats.percentileRank([1, 2, 3, 4, 5], 3); // → 40
+   * Stats.percentileRank([1, 2, 3, 4, 5], 5); // → 80
+   * ```
    */
-  static PercentileRank(arr: number[], value: number): number {
+  public static percentileRank(arr: number[], value: number): number {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
@@ -282,8 +480,19 @@ export class Stats {
 
   /**
    * Calculate percentile value at given rank
+   * 
+   * @param arr - Array of numbers
+   * @param rank - Percentile rank (0-100)
+   * @returns Value at the given percentile
+   * @throws {MathterError} When input is invalid or rank is out of range
+   * 
+   * @example
+   * ```typescript
+   * Stats.percentile([1, 2, 3, 4, 5], 50); // → 3 (median)
+   * Stats.percentile([1, 2, 3, 4, 5], 100); // → 5 (maximum)
+   * ```
    */
-  static Percentile(arr: number[], rank: number): number {
+  public static percentile(arr: number[], rank: number): number {
     if (!Array.isArray(arr) || arr.length === 0) {
       throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
     }
@@ -307,12 +516,12 @@ export class Stats {
 }
 
 // Convenience functions for direct import
-export const mean = Stats.Mean;
-export const median = Stats.Median;
-export const mode = Stats.Mode;
-export const range = Stats.Range;
-export const stdDev = Stats.StdDev;
-export const variance = Stats.Variance;
-export const sum = Stats.Sum;
-export const min = Stats.Min;
-export const max = Stats.Max;
+export const mean = Stats.mean;
+export const median = Stats.median;
+export const mode = Stats.mode;
+export const range = Stats.range;
+export const stdDev = Stats.stdDev;
+export const variance = Stats.variance;
+export const sum = Stats.sum;
+export const min = Stats.min;
+export const max = Stats.max;

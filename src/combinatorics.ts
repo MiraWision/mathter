@@ -5,11 +5,39 @@ const isInteger = (n: number): boolean => {
   return n % 1 === 0;
 };
 
+/**
+ * Combinatorics utilities for counting and generating arrangements
+ * 
+ * Provides methods for calculating factorials, permutations, combinations,
+ * and generating all possible arrangements of elements.
+ * 
+ * @example
+ * ```typescript
+ * // Calculate factorial
+ * Combinatorics.factorial(5); // → 120
+ * 
+ * // Calculate permutations
+ * Combinatorics.permutations(5, 3); // → { count: 60 }
+ * 
+ * // Generate combinations
+ * Combinatorics.generateCombinations(['a', 'b', 'c'], 2); // → [['a', 'b'], ['a', 'c'], ['b', 'c']]
+ * ```
+ */
 export class Combinatorics {
   /**
    * Calculate factorial of n
+   * 
+   * @param n - Non-negative integer
+   * @returns Factorial of n (n!)
+   * @throws {MathterError} When n is negative or too large (>170)
+   * 
+   * @example
+   * ```typescript
+   * Combinatorics.factorial(5); // → 120
+   * Combinatorics.factorial(0); // → 1
+   * ```
    */
-  static Factorial(n: number): number {
+  public static factorial(n: number): number {
     if (!isInteger(n) || n < 0) {
       throw new MathterError('Number must be a non-negative integer', 'INVALID_INPUT');
     }
@@ -32,8 +60,19 @@ export class Combinatorics {
    * Calculate permutations P(n) or P(n, r)
    * P(n) = n! (all permutations of n elements)
    * P(n, r) = n! / (n - r)! (permutations of r elements from n)
+   * 
+   * @param n - Total number of elements
+   * @param r - Optional number of elements to arrange (if not provided, uses all n elements)
+   * @returns Object containing the count of permutations
+   * @throws {MathterError} When n or r are negative, or r > n
+   * 
+   * @example
+   * ```typescript
+   * Combinatorics.permutations(5); // → { count: 120 } (5!)
+   * Combinatorics.permutations(5, 3); // → { count: 60 } (P(5,3))
+   * ```
    */
-  static Permutations(n: number, r?: number): PermutationResult {
+  public static permutations(n: number, r?: number): PermutationResult {
     if (!isInteger(n) || n < 0) {
       throw new MathterError('n must be a non-negative integer', 'INVALID_INPUT');
     }
@@ -47,10 +86,10 @@ export class Combinatorics {
         throw new MathterError('r cannot be greater than n', 'INVALID_RANGE');
       }
 
-      const count = Combinatorics.Factorial(n) / Combinatorics.Factorial(n - r);
+      const count = Combinatorics.factorial(n) / Combinatorics.factorial(n - r);
       return { count };
     } else {
-      const count = Combinatorics.Factorial(n);
+      const count = Combinatorics.factorial(n);
       return { count };
     }
   }
@@ -58,8 +97,19 @@ export class Combinatorics {
   /**
    * Calculate combinations C(n, r)
    * C(n, r) = n! / (r! * (n - r)!)
+   * 
+   * @param n - Total number of elements
+   * @param r - Number of elements to choose
+   * @returns Object containing the count of combinations
+   * @throws {MathterError} When n or r are negative, or r > n
+   * 
+   * @example
+   * ```typescript
+   * Combinatorics.combinations(5, 3); // → { count: 10 } (C(5,3))
+   * Combinatorics.combinations(4, 2); // → { count: 6 } (C(4,2))
+   * ```
    */
-  static Combinations(n: number, r: number): CombinationResult {
+  public static combinations(n: number, r: number): CombinationResult {
     if (!isInteger(n) || n < 0) {
       throw new MathterError('n must be a non-negative integer', 'INVALID_INPUT');
     }
@@ -92,8 +142,19 @@ export class Combinatorics {
 
   /**
    * Generate all permutations of an array
+   * 
+   * @param arr - Array of elements to permute
+   * @param r - Optional number of elements to arrange (if not provided, uses all elements)
+   * @returns Array of all possible permutations
+   * @throws {MathterError} When input is not an array or r is invalid
+   * 
+   * @example
+   * ```typescript
+   * Combinatorics.generatePermutations(['a', 'b', 'c']); // → [['a','b','c'], ['a','c','b'], ...]
+   * Combinatorics.generatePermutations(['a', 'b', 'c'], 2); // → [['a','b'], ['a','c'], ['b','a'], ...]
+   * ```
    */
-  static GeneratePermutations<T>(arr: T[], r?: number): T[][] {
+  public static generatePermutations<T>(arr: T[], r?: number): T[][] {
     if (!Array.isArray(arr)) {
       throw new MathterError('Input must be an array', 'INVALID_INPUT');
     }
@@ -110,8 +171,18 @@ export class Combinatorics {
 
   /**
    * Generate all combinations of an array
+   * 
+   * @param arr - Array of elements to combine
+   * @param r - Number of elements to choose
+   * @returns Array of all possible combinations
+   * @throws {MathterError} When input is not an array or r is invalid
+   * 
+   * @example
+   * ```typescript
+   * Combinatorics.generateCombinations(['a', 'b', 'c'], 2); // → [['a','b'], ['a','c'], ['b','c']]
+   * ```
    */
-  static GenerateCombinations<T>(arr: T[], r: number): T[][] {
+  public static generateCombinations<T>(arr: T[], r: number): T[][] {
     if (!Array.isArray(arr)) {
       throw new MathterError('Input must be an array', 'INVALID_INPUT');
     }
@@ -130,8 +201,18 @@ export class Combinatorics {
 
   /**
    * Calculate Stirling numbers of the first kind
+   * 
+   * @param n - Total number of elements
+   * @param k - Number of cycles
+   * @returns Stirling number of the first kind s(n,k)
+   * @throws {MathterError} When n or k are negative
+   * 
+   * @example
+   * ```typescript
+   * Combinatorics.stirlingFirst(4, 2); // → 11
+   * ```
    */
-  static StirlingFirst(n: number, k: number): number {
+  public static stirlingFirst(n: number, k: number): number {
     if (!isInteger(n) || !isInteger(k) || n < 0 || k < 0) {
       throw new MathterError('Both n and k must be non-negative integers', 'INVALID_INPUT');
     }
@@ -159,8 +240,18 @@ export class Combinatorics {
 
   /**
    * Calculate Stirling numbers of the second kind
+   * 
+   * @param n - Total number of elements
+   * @param k - Number of non-empty subsets
+   * @returns Stirling number of the second kind S(n,k)
+   * @throws {MathterError} When n or k are negative
+   * 
+   * @example
+   * ```typescript
+   * Combinatorics.stirlingSecond(4, 2); // → 7
+   * ```
    */
-  static StirlingSecond(n: number, k: number): number {
+  public static stirlingSecond(n: number, k: number): number {
     if (!isInteger(n) || !isInteger(k) || n < 0 || k < 0) {
       throw new MathterError('Both n and k must be non-negative integers', 'INVALID_INPUT');
     }
@@ -243,7 +334,7 @@ export class Combinatorics {
 }
 
 // Convenience functions for direct import
-export const permutations = Combinatorics.Permutations;
-export const combinations = Combinatorics.Combinations;
-export const generatePermutations = Combinatorics.GeneratePermutations;
-export const generateCombinations = Combinatorics.GenerateCombinations;
+export const permutations = Combinatorics.permutations;
+export const combinations = Combinatorics.combinations;
+export const generatePermutations = Combinatorics.generatePermutations;
+export const generateCombinations = Combinatorics.generateCombinations;

@@ -8,11 +8,37 @@ const isInteger = (n: number): boolean => {
 // Character sets for different bases
 const DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+/**
+ * Base conversion utilities for different number systems
+ * 
+ * Provides methods to convert numbers between different base systems (2-36),
+ * including binary, octal, decimal, and hexadecimal conversions.
+ * 
+ * @example
+ * ```typescript
+ * // Convert decimal to binary
+ * Base.convert('10', 10, 2); // → { value: '1010', fromBase: 10, toBase: 2, originalValue: '10' }
+ * 
+ * // Convert binary to hexadecimal
+ * Base.convert('1010', 2, 16); // → { value: 'A', fromBase: 2, toBase: 16, originalValue: '1010' }
+ * ```
+ */
 export class Base {
   /**
    * Convert number between different base systems
+   * 
+   * @param value - The number to convert as a string
+   * @param from - Source base system (2-36)
+   * @param to - Target base system (2-36)
+   * @returns Conversion result with original and converted values
+   * @throws {MathterError} When base is invalid or value is not valid in source base
+   * 
+   * @example
+   * ```typescript
+   * Base.convert('FF', 16, 10); // → { value: '255', fromBase: 16, toBase: 10, originalValue: 'FF' }
+   * ```
    */
-  static Convert(value: string, from: BaseSystem, to: BaseSystem): BaseConversionResult {
+  public static convert(value: string, from: BaseSystem, to: BaseSystem): BaseConversionResult {
     if (from < 2 || from > 36 || to < 2 || to > 36) {
       throw new MathterError('Base must be between 2 and 36', 'INVALID_BASE');
     }
@@ -42,8 +68,18 @@ export class Base {
 
   /**
    * Convert decimal to binary
+   * 
+   * @param n - Non-negative integer to convert
+   * @returns Binary representation as string
+   * @throws {MathterError} When input is not a non-negative integer
+   * 
+   * @example
+   * ```typescript
+   * Base.decimalToBinary(10); // → '1010'
+   * Base.decimalToBinary(0); // → '0'
+   * ```
    */
-  static DecimalToBinary(n: number): string {
+  public static decimalToBinary(n: number): string {
     if (!isInteger(n) || n < 0) {
       throw new MathterError('Input must be a non-negative integer', 'INVALID_INPUT');
     }
@@ -53,8 +89,18 @@ export class Base {
 
   /**
    * Convert binary to decimal
+   * 
+   * @param binary - Binary string to convert
+   * @returns Decimal number
+   * @throws {MathterError} When input is not a valid binary string
+   * 
+   * @example
+   * ```typescript
+   * Base.binaryToDecimal('1010'); // → 10
+   * Base.binaryToDecimal('0'); // → 0
+   * ```
    */
-  static BinaryToDecimal(binary: string): number {
+  public static binaryToDecimal(binary: string): number {
     if (!binary || typeof binary !== 'string') {
       throw new MathterError('Input must be a non-empty string', 'INVALID_INPUT');
     }
@@ -68,8 +114,18 @@ export class Base {
 
   /**
    * Convert decimal to hexadecimal
+   * 
+   * @param n - Non-negative integer to convert
+   * @returns Hexadecimal representation as string
+   * @throws {MathterError} When input is not a non-negative integer
+   * 
+   * @example
+   * ```typescript
+   * Base.decimalToHex(255); // → 'FF'
+   * Base.decimalToHex(16); // → '10'
+   * ```
    */
-  static DecimalToHex(n: number): string {
+  public static decimalToHex(n: number): string {
     if (!isInteger(n) || n < 0) {
       throw new MathterError('Input must be a non-negative integer', 'INVALID_INPUT');
     }
@@ -79,8 +135,18 @@ export class Base {
 
   /**
    * Convert hexadecimal to decimal
+   * 
+   * @param hex - Hexadecimal string to convert
+   * @returns Decimal number
+   * @throws {MathterError} When input is not a valid hexadecimal string
+   * 
+   * @example
+   * ```typescript
+   * Base.hexToDecimal('FF'); // → 255
+   * Base.hexToDecimal('10'); // → 16
+   * ```
    */
-  static HexToDecimal(hex: string): number {
+  public static hexToDecimal(hex: string): number {
     if (!hex || typeof hex !== 'string') {
       throw new MathterError('Input must be a non-empty string', 'INVALID_INPUT');
     }
@@ -94,8 +160,18 @@ export class Base {
 
   /**
    * Convert decimal to octal
+   * 
+   * @param n - Non-negative integer to convert
+   * @returns Octal representation as string
+   * @throws {MathterError} When input is not a non-negative integer
+   * 
+   * @example
+   * ```typescript
+   * Base.decimalToOctal(64); // → '100'
+   * Base.decimalToOctal(8); // → '10'
+   * ```
    */
-  static DecimalToOctal(n: number): string {
+  public static decimalToOctal(n: number): string {
     if (!isInteger(n) || n < 0) {
       throw new MathterError('Input must be a non-negative integer', 'INVALID_INPUT');
     }
@@ -105,8 +181,18 @@ export class Base {
 
   /**
    * Convert octal to decimal
+   * 
+   * @param octal - Octal string to convert
+   * @returns Decimal number
+   * @throws {MathterError} When input is not a valid octal string
+   * 
+   * @example
+   * ```typescript
+   * Base.octalToDecimal('100'); // → 64
+   * Base.octalToDecimal('10'); // → 8
+   * ```
    */
-  static OctalToDecimal(octal: string): number {
+  public static octalToDecimal(octal: string): number {
     if (!octal || typeof octal !== 'string') {
       throw new MathterError('Input must be a non-empty string', 'INVALID_INPUT');
     }
@@ -120,15 +206,46 @@ export class Base {
 
   /**
    * Check if a value is valid in given base
+   * 
+   * @param value - String to validate
+   * @param base - Base system to check against
+   * @returns True if value is valid in the given base
+   * 
+   * @example
+   * ```typescript
+   * Base.isValidInBase('1010', 2); // → true
+   * Base.isValidInBase('1020', 2); // → false
+   * Base.isValidInBase('FF', 16); // → true
+   * ```
    */
-  static IsValidInBase(value: string, base: BaseSystem): boolean {
-    return Base.isValidInBase(value, base);
+  public static isValidInBase(value: string, base: BaseSystem): boolean {
+    if (!value || typeof value !== 'string') return false;
+
+    const upperValue = value.toUpperCase();
+    const validDigits = DIGITS.substring(0, base);
+
+    for (const char of upperValue) {
+      if (!validDigits.includes(char)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /**
    * Get all valid digits for a given base
+   * 
+   * @param base - Base system (2-36)
+   * @returns String containing all valid digits for the base
+   * 
+   * @example
+   * ```typescript
+   * Base.getDigitsForBase(2); // → '01'
+   * Base.getDigitsForBase(16); // → '0123456789ABCDEF'
+   * ```
    */
-  static GetDigitsForBase(base: BaseSystem): string {
+  public static getDigitsForBase(base: BaseSystem): string {
     return DIGITS.substring(0, base);
   }
 
@@ -166,29 +283,14 @@ export class Base {
 
     return result;
   }
-
-  private static isValidInBase(value: string, base: BaseSystem): boolean {
-    if (!value || typeof value !== 'string') return false;
-
-    const upperValue = value.toUpperCase();
-    const validDigits = DIGITS.substring(0, base);
-
-    for (const char of upperValue) {
-      if (!validDigits.includes(char)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
 }
 
 // Convenience functions for direct import
-export const convertBase = Base.Convert;
-export const decimalToBinary = Base.DecimalToBinary;
-export const binaryToDecimal = Base.BinaryToDecimal;
-export const decimalToHex = Base.DecimalToHex;
-export const hexToDecimal = Base.HexToDecimal;
-export const decimalToOctal = Base.DecimalToOctal;
-export const octalToDecimal = Base.OctalToDecimal;
-export const isValidInBase = Base.IsValidInBase;
+export const convertBase = Base.convert;
+export const decimalToBinary = Base.decimalToBinary;
+export const binaryToDecimal = Base.binaryToDecimal;
+export const decimalToHex = Base.decimalToHex;
+export const hexToDecimal = Base.hexToDecimal;
+export const decimalToOctal = Base.decimalToOctal;
+export const octalToDecimal = Base.octalToDecimal;
+export const isValidInBase = Base.isValidInBase;

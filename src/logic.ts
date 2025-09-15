@@ -1,10 +1,39 @@
 import { LogicVariables, TruthTable, TruthTableRow, MathterError } from './types';
 
+/**
+ * Boolean logic utilities for expression evaluation and truth tables
+ * 
+ * Provides methods for evaluating logical expressions, generating truth tables,
+ * checking logical properties, and converting between normal forms.
+ * 
+ * @example
+ * ```typescript
+ * // Evaluate logical expressions
+ * Logic.eval('A && !B', { A: true, B: false }); // → true
+ * 
+ * // Generate truth tables
+ * Logic.truthTable(['A', 'B'], 'A && B'); // → { variables: ['A', 'B'], rows: [...] }
+ * 
+ * // Check logical properties
+ * Logic.isTautology('A || !A', ['A']); // → true
+ * ```
+ */
 export class Logic {
   /**
    * Evaluate a logical expression with given variables
+   * 
+   * @param expr - Logical expression string
+   * @param vars - Object containing variable values
+   * @returns Result of the expression evaluation
+   * @throws {MathterError} When expression is invalid or variables are undefined
+   * 
+   * @example
+   * ```typescript
+   * Logic.eval('A && !B', { A: true, B: false }); // → true
+   * Logic.eval('A || B', { A: false, B: true }); // → true
+   * ```
    */
-  static Eval(expr: string, vars: LogicVariables): boolean {
+  public static eval(expr: string, vars: LogicVariables): boolean {
     if (typeof expr !== 'string' || !expr.trim()) {
       throw new MathterError('Expression must be a non-empty string', 'INVALID_EXPRESSION');
     }
@@ -22,8 +51,19 @@ export class Logic {
 
   /**
    * Generate truth table for given variables and expression
+   * 
+   * @param vars - Array of variable names
+   * @param expr - Logical expression string
+   * @returns Truth table with all possible variable combinations and results
+   * @throws {MathterError} When variables or expression are invalid
+   * 
+   * @example
+   * ```typescript
+   * Logic.truthTable(['A', 'B'], 'A && B'); // → { variables: ['A', 'B'], rows: [...] }
+   * Logic.truthTable(['P'], 'P || !P'); // → { variables: ['P'], rows: [...] }
+   * ```
    */
-  static TruthTable(vars: string[], expr: string): TruthTable {
+  public static truthTable(vars: string[], expr: string): TruthTable {
     if (!Array.isArray(vars) || vars.length === 0) {
       throw new MathterError('Variables must be a non-empty array', 'INVALID_VARIABLES');
     }
@@ -64,10 +104,21 @@ export class Logic {
 
   /**
    * Check if two logical expressions are equivalent
+   * 
+   * @param expr1 - First logical expression
+   * @param expr2 - Second logical expression
+   * @param vars - Array of variable names used in both expressions
+   * @returns True if expressions are logically equivalent
+   * 
+   * @example
+   * ```typescript
+   * Logic.areEquivalent('A && B', 'B && A', ['A', 'B']); // → true
+   * Logic.areEquivalent('A && B', 'A || B', ['A', 'B']); // → false
+   * ```
    */
-  static AreEquivalent(expr1: string, expr2: string, vars: string[]): boolean {
-    const table1 = this.TruthTable(vars, expr1);
-    const table2 = this.TruthTable(vars, expr2);
+  public static areEquivalent(expr1: string, expr2: string, vars: string[]): boolean {
+    const table1 = this.truthTable(vars, expr1);
+    const table2 = this.truthTable(vars, expr2);
 
     if (table1.rows.length !== table2.rows.length) {
       return false;
@@ -84,33 +135,73 @@ export class Logic {
 
   /**
    * Check if an expression is a tautology (always true)
+   * 
+   * @param expr - Logical expression to check
+   * @param vars - Array of variable names used in the expression
+   * @returns True if the expression is always true
+   * 
+   * @example
+   * ```typescript
+   * Logic.isTautology('A || !A', ['A']); // → true
+   * Logic.isTautology('A && !A', ['A']); // → false
+   * ```
    */
-  static IsTautology(expr: string, vars: string[]): boolean {
-    const table = this.TruthTable(vars, expr);
+  public static isTautology(expr: string, vars: string[]): boolean {
+    const table = this.truthTable(vars, expr);
     return table.rows.every(row => row.result === true);
   }
 
   /**
    * Check if an expression is a contradiction (always false)
+   * 
+   * @param expr - Logical expression to check
+   * @param vars - Array of variable names used in the expression
+   * @returns True if the expression is always false
+   * 
+   * @example
+   * ```typescript
+   * Logic.isContradiction('A && !A', ['A']); // → true
+   * Logic.isContradiction('A || !A', ['A']); // → false
+   * ```
    */
-  static IsContradiction(expr: string, vars: string[]): boolean {
-    const table = this.TruthTable(vars, expr);
+  public static isContradiction(expr: string, vars: string[]): boolean {
+    const table = this.truthTable(vars, expr);
     return table.rows.every(row => row.result === false);
   }
 
   /**
    * Check if an expression is satisfiable (has at least one true case)
+   * 
+   * @param expr - Logical expression to check
+   * @param vars - Array of variable names used in the expression
+   * @returns True if the expression has at least one satisfying assignment
+   * 
+   * @example
+   * ```typescript
+   * Logic.isSatisfiable('A && B', ['A', 'B']); // → true
+   * Logic.isSatisfiable('A && !A', ['A']); // → false
+   * ```
    */
-  static IsSatisfiable(expr: string, vars: string[]): boolean {
-    const table = this.TruthTable(vars, expr);
+  public static isSatisfiable(expr: string, vars: string[]): boolean {
+    const table = this.truthTable(vars, expr);
     return table.rows.some(row => row.result === true);
   }
 
   /**
    * Get all satisfying assignments for an expression
+   * 
+   * @param expr - Logical expression to check
+   * @param vars - Array of variable names used in the expression
+   * @returns Array of variable assignments that make the expression true
+   * 
+   * @example
+   * ```typescript
+   * Logic.getSatisfyingAssignments('A && B', ['A', 'B']); // → [{A: true, B: true}]
+   * Logic.getSatisfyingAssignments('A || B', ['A', 'B']); // → [{A: true, B: false}, ...]
+   * ```
    */
-  static GetSatisfyingAssignments(expr: string, vars: string[]): LogicVariables[] {
-    const table = this.TruthTable(vars, expr);
+  public static getSatisfyingAssignments(expr: string, vars: string[]): LogicVariables[] {
+    const table = this.truthTable(vars, expr);
     return table.rows
       .filter(row => row.result === true)
       .map(row => row.variables);
@@ -118,9 +209,19 @@ export class Logic {
 
   /**
    * Convert expression to Disjunctive Normal Form (DNF)
+   * 
+   * @param expr - Logical expression to convert
+   * @param vars - Array of variable names used in the expression
+   * @returns Expression in DNF form
+   * 
+   * @example
+   * ```typescript
+   * Logic.toDNF('A && B', ['A', 'B']); // → '(A && B)'
+   * Logic.toDNF('A || B', ['A', 'B']); // → '(A && B) || (A && !B) || (!A && B)'
+   * ```
    */
-  static ToDNF(expr: string, vars: string[]): string {
-    const table = this.TruthTable(vars, expr);
+  public static toDNF(expr: string, vars: string[]): string {
+    const table = this.truthTable(vars, expr);
     const trueRows = table.rows.filter(row => row.result === true);
 
     if (trueRows.length === 0) {
@@ -145,9 +246,19 @@ export class Logic {
 
   /**
    * Convert expression to Conjunctive Normal Form (CNF)
+   * 
+   * @param expr - Logical expression to convert
+   * @param vars - Array of variable names used in the expression
+   * @returns Expression in CNF form
+   * 
+   * @example
+   * ```typescript
+   * Logic.toCNF('A && B', ['A', 'B']); // → '(A || !B) && (!A || B) && (A || B)'
+   * Logic.toCNF('A || B', ['A', 'B']); // → 'true'
+   * ```
    */
-  static ToCNF(expr: string, vars: string[]): string {
-    const table = this.TruthTable(vars, expr);
+  public static toCNF(expr: string, vars: string[]): string {
+    const table = this.truthTable(vars, expr);
     const falseRows = table.rows.filter(row => row.result === false);
 
     if (falseRows.length === 0) {
@@ -171,7 +282,7 @@ export class Logic {
   }
 
   // Private helper methods
-  static evaluateExpression(expr: string, vars: LogicVariables): boolean {
+  private static evaluateExpression(expr: string, vars: LogicVariables): boolean {
     // Clean and validate expression
     let cleanExpr = expr.replace(/\s+/g, ' ').trim();
     
@@ -226,8 +337,16 @@ export class Logic {
 
   /**
    * Get all possible variable combinations for given variables
+   * 
+   * @param vars - Array of variable names
+   * @returns Array of all possible variable assignments
+   * 
+   * @example
+   * ```typescript
+   * Logic.getVariableCombinations(['A', 'B']); // → [{A: false, B: false}, {A: false, B: true}, ...]
+   * ```
    */
-  static GetVariableCombinations(vars: string[]): LogicVariables[] {
+  public static getVariableCombinations(vars: string[]): LogicVariables[] {
     if (!Array.isArray(vars) || vars.length === 0) {
       throw new MathterError('Variables must be a non-empty array', 'INVALID_VARIABLES');
     }
@@ -251,8 +370,17 @@ export class Logic {
 
   /**
    * Simplify a logical expression (basic simplification)
+   * 
+   * @param expr - Logical expression to simplify
+   * @returns Simplified expression
+   * 
+   * @example
+   * ```typescript
+   * Logic.simplify('!!A'); // → 'A'
+   * Logic.simplify('A && true'); // → 'A'
+   * ```
    */
-  static Simplify(expr: string): string {
+  public static simplify(expr: string): string {
     // Basic simplification rules
     let simplified = expr
       .replace(/\s+/g, ' ')
@@ -272,11 +400,11 @@ export class Logic {
 }
 
 // Convenience functions for direct import
-export const evalLogic = Logic.Eval;
-export const truthTable = Logic.TruthTable;
-export const areEquivalent = Logic.AreEquivalent;
-export const isTautology = Logic.IsTautology;
-export const isContradiction = Logic.IsContradiction;
-export const isSatisfiable = Logic.IsSatisfiable;
-export const toDNF = Logic.ToDNF;
-export const toCNF = Logic.ToCNF;
+export const evalLogic = Logic.eval;
+export const truthTable = Logic.truthTable;
+export const areEquivalent = Logic.areEquivalent;
+export const isTautology = Logic.isTautology;
+export const isContradiction = Logic.isContradiction;
+export const isSatisfiable = Logic.isSatisfiable;
+export const toDNF = Logic.toDNF;
+export const toCNF = Logic.toCNF;

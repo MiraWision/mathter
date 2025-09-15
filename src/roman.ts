@@ -29,11 +29,42 @@ const VALUE_TO_ROMAN: Record<number, RomanSymbol> = {
 // Roman numeral patterns for validation
 const ROMAN_PATTERN = /^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
 
+/**
+ * Roman numeral conversion utilities
+ * 
+ * Provides methods for converting between Arabic numbers and Roman numerals,
+ * validation, and symbol operations.
+ * 
+ * @example
+ * ```typescript
+ * // Convert to Roman numerals
+ * Roman.to(2025); // → "MMXXV"
+ * Roman.to(3999); // → "MMMCMXCIX"
+ * 
+ * // Convert from Roman numerals
+ * Roman.from("MMXXV"); // → 2025
+ * Roman.from("IV"); // → 4
+ * 
+ * // Validation
+ * Roman.isRoman("MMXXV"); // → true
+ * Roman.isRoman("INVALID"); // → false
+ * ```
+ */
 export class Roman {
   /**
    * Convert number to Roman numeral
+   * 
+   * @param n - Number to convert (1-3999)
+   * @returns Roman numeral string
+   * @throws {MathterError} When number is out of range or not an integer
+   * 
+   * @example
+   * ```typescript
+   * Roman.to(2025); // → "MMXXV"
+   * Roman.to(4); // → "IV"
+   * ```
    */
-  static To(n: number): string {
+  public static to(n: number): string {
     if (n <= 0 || n > 3999) {
       throw new MathterError('Number must be between 1 and 3999', 'INVALID_RANGE');
     }
@@ -58,8 +89,18 @@ export class Roman {
 
   /**
    * Convert Roman numeral to number
+   * 
+   * @param str - Roman numeral string
+   * @returns Arabic number
+   * @throws {MathterError} When string is not a valid Roman numeral
+   * 
+   * @example
+   * ```typescript
+   * Roman.from("MMXXV"); // → 2025
+   * Roman.from("IV"); // → 4
+   * ```
    */
-  static From(str: string): number {
+  public static from(str: string): number {
     if (!str || typeof str !== 'string') {
       throw new MathterError('Input must be a non-empty string', 'INVALID_INPUT');
     }
@@ -90,8 +131,17 @@ export class Roman {
 
   /**
    * Check if string is a valid Roman numeral
+   * 
+   * @param str - String to validate
+   * @returns True if string is a valid Roman numeral
+   * 
+   * @example
+   * ```typescript
+   * Roman.isRoman("MMXXV"); // → true
+   * Roman.isRoman("INVALID"); // → false
+   * ```
    */
-  static IsRoman(str: string): boolean {
+  public static isRoman(str: string): boolean {
     if (!str || typeof str !== 'string') {
       return false;
     }
@@ -102,27 +152,52 @@ export class Roman {
 
   /**
    * Get all Roman symbols
+   * 
+   * @returns Array of all valid Roman symbols
+   * 
+   * @example
+   * ```typescript
+   * Roman.getSymbols(); // → ['I', 'V', 'X', 'L', 'C', 'D', 'M']
+   * ```
    */
-  static GetSymbols(): RomanSymbol[] {
+  public static getSymbols(): RomanSymbol[] {
     return Object.keys(ROMAN_TO_VALUE) as RomanSymbol[];
   }
 
   /**
    * Get value of a Roman symbol
+   * 
+   * @param symbol - Roman symbol
+   * @returns Numeric value of the symbol
+   * 
+   * @example
+   * ```typescript
+   * Roman.getSymbolValue('M'); // → 1000
+   * Roman.getSymbolValue('I'); // → 1
+   * ```
    */
-  static GetSymbolValue(symbol: RomanSymbol): RomanValue {
+  public static getSymbolValue(symbol: RomanSymbol): RomanValue {
     return ROMAN_TO_VALUE[symbol];
   }
 
   /**
    * Get Roman symbol for a value
+   * 
+   * @param value - Numeric value
+   * @returns Roman symbol for the value
+   * 
+   * @example
+   * ```typescript
+   * Roman.getValueSymbol(1000); // → 'M'
+   * Roman.getValueSymbol(1); // → 'I'
+   * ```
    */
-  static GetValueSymbol(value: RomanValue): RomanSymbol {
+  public static getValueSymbol(value: RomanValue): RomanSymbol {
     return VALUE_TO_ROMAN[value];
   }
 }
 
 // Convenience functions for direct import
-export const toRoman = Roman.To;
-export const fromRoman = Roman.From;
-export const isRoman = Roman.IsRoman;
+export const toRoman = Roman.to;
+export const fromRoman = Roman.from;
+export const isRoman = Roman.isRoman;
