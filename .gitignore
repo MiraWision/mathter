@@ -1,0 +1,63 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+*.js.map
+base.js
+base.d.ts
+combinatorics.js
+combinatorics.d.ts
+convert.js
+convert.d.ts
+geometry.js
+geometry.d.ts
+index.js
+index.d.ts
+logic.js
+logic.d.ts
+number.js
+number.d.ts
+prime.js
+prime.d.ts
+roman.js
+roman.d.ts
+stats.js
+stats.d.ts
+symbol.js
+symbol.d.ts
+types.js
+types.d.ts
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Coverage
+coverage/
+.nyc_output
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Temporary files
+*.tmp
+*.temp

@@ -1,0 +1,99 @@
+{
+  "name": "@mathter/core",
+  "version": "1.0.0",
+  "description": "A comprehensive mathematical library for TypeScript, providing functionalities for unit conversion, number manipulation, geometry, statistics, and various mathematical operations.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./convert": {
+      "types": "./convert.d.ts",
+      "default": "./convert.js"
+    },
+    "./roman": {
+      "types": "./roman.d.ts",
+      "default": "./roman.js"
+    },
+    "./symbol": {
+      "types": "./symbol.d.ts",
+      "default": "./symbol.js"
+    },
+    "./base": {
+      "types": "./base.d.ts",
+      "default": "./base.js"
+    },
+    "./number": {
+      "types": "./number.d.ts",
+      "default": "./number.js"
+    },
+    "./combinatorics": {
+      "types": "./combinatorics.d.ts",
+      "default": "./combinatorics.js"
+    },
+    "./prime": {
+      "types": "./prime.d.ts",
+      "default": "./prime.js"
+    },
+    "./geometry": {
+      "types": "./geometry.d.ts",
+      "default": "./geometry.js"
+    },
+    "./stats": {
+      "types": "./stats.d.ts",
+      "default": "./stats.js"
+    },
+    "./logic": {
+      "types": "./logic.d.ts",
+      "default": "./logic.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node index.js",
+    "test": "jest",
+    "pack": "npm pack",
+    "prepublish": "npm run build",
+    "publish": "npm publish --access public"
+  },
+  "keywords": [
+    "math",
+    "mathematics",
+    "conversion",
+    "geometry",
+    "statistics",
+    "combinatorics",
+    "prime",
+    "roman",
+    "base",
+    "number",
+    "logic",
+    "symbols",
+    "units",
+    "temperature",
+    "length",
+    "mass",
+    "speed",
+    "angle",
+    "mathter",
+    "typescript"
+  ],
+  "author": "Mathter Team",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mathter/core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mathter/core/issues"
+  },
+  "homepage": "https://mathter.dev",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "29.5.12",
+    "jest": "29.7.0",
+    "ts-jest": "29.1.2",
+    "typescript": "5.3.3"
+  }
+}
