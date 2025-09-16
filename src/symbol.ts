@@ -91,7 +91,7 @@ export class Symbol {
    * Symbol.get('sqrt'); // → '√'
    * ```
    */
-  public static get(name: MathSymbolName): string {
+  public static getSymbol(name: MathSymbolName): string {
     if (!(name in SYMBOL_MAP)) {
       throw new MathterError(`Unknown symbol name: ${name}`, 'UNKNOWN_SYMBOL');
     }
@@ -107,12 +107,12 @@ export class Symbol {
    * 
    * @example
    * ```typescript
-   * Symbol.name('π'); // → 'pi'
-   * Symbol.name('√'); // → 'sqrt'
-   * Symbol.name('?'); // → null
+   * Symbol.getSymbolName('π'); // → 'pi'
+   * Symbol.getSymbolName('√'); // → 'sqrt'
+   * Symbol.getSymbolName('?'); // → null
    * ```
    */
-  public static name(symbol: string): MathSymbolName | null {
+  public static getSymbolName(symbol: string): MathSymbolName | null {
     return NAME_MAP[symbol] || null;
   }
 
@@ -148,103 +148,9 @@ export class Symbol {
     
     return result;
   }
-
-  /**
-   * Get all available symbol names
-   * 
-   * @returns Array of all symbol names
-   * 
-   * @example
-   * ```typescript
-   * Symbol.getNames(); // → ['pi', 'e', 'infinity', 'sqrt', ...]
-   * ```
-   */
-  public static getNames(): MathSymbolName[] {
-    return Object.keys(SYMBOL_MAP) as MathSymbolName[];
-  }
-
-  /**
-   * Get all available symbols
-   * 
-   * @returns Array of all Unicode symbol characters
-   * 
-   * @example
-   * ```typescript
-   * Symbol.getSymbols(); // → ['π', 'e', '∞', '√', ...]
-   * ```
-   */
-  public static getSymbols(): string[] {
-    return Object.values(SYMBOL_MAP);
-  }
-
-  /**
-   * Check if a string is a mathematical symbol
-   * 
-   * @param str - String to check
-   * @returns True if string is a mathematical symbol
-   * 
-   * @example
-   * ```typescript
-   * Symbol.isSymbol('π'); // → true
-   * Symbol.isSymbol('a'); // → false
-   * ```
-   */
-  public static isSymbol(str: string): boolean {
-    return str in NAME_MAP;
-  }
-
-  /**
-   * Get symbol by partial name match
-   * 
-   * @param partialName - Partial symbol name to search for
-   * @returns Array of matching symbol names
-   * @throws {MathterError} When input is not a string
-   * 
-   * @example
-   * ```typescript
-   * Symbol.findByName('gr'); // → ['greater', 'greater-equal']
-   * Symbol.findByName('alpha'); // → ['alpha']
-   * ```
-   */
-  public static findByName(partialName: string): MathSymbolName[] {
-    if (typeof partialName !== 'string') {
-      throw new MathterError('Input must be a string', 'INVALID_INPUT');
-    }
-
-    const lowerPartial = partialName.toLowerCase();
-    return Object.keys(SYMBOL_MAP).filter(name => 
-      name.toLowerCase().includes(lowerPartial)
-    ) as MathSymbolName[];
-  }
-
-  /**
-   * Get all symbols in a category
-   * 
-   * @param category - Symbol category
-   * @returns Array of symbol names in the category
-   * 
-   * @example
-   * ```typescript
-   * Symbol.getByCategory('greek'); // → ['alpha', 'beta', 'gamma', ...]
-   * Symbol.getByCategory('operations'); // → ['sqrt', 'sum', 'product', ...]
-   * ```
-   */
-  public static getByCategory(category: 'constants' | 'operations' | 'relations' | 'greek' | 'sets' | 'logic'): MathSymbolName[] {
-    const categories: Record<string, MathSymbolName[]> = {
-      constants: ['pi', 'e', 'infinity'],
-      operations: ['sqrt', 'sum', 'product', 'integral', 'plus', 'minus', 'times', 'divide', 'plus-minus'],
-      relations: ['equals', 'not-equals', 'less', 'greater', 'less-equal', 'greater-equal'],
-      greek: ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'theta', 'lambda', 'mu', 'sigma', 'phi', 'omega'],
-      sets: ['empty-set', 'union', 'intersection', 'subset', 'superset', 'element', 'not-element'],
-      logic: ['therefore', 'because']
-    };
-
-    return categories[category] || [];
-  }
 }
 
 // Convenience functions for direct import
-export const getSymbol = Symbol.get;
-export const getSymbolName = Symbol.name;
+export const getSymbol = Symbol.getSymbol;
+export const getSymbolName = Symbol.getSymbolName;
 export const replaceInText = Symbol.replaceInText;
-export const isSymbol = Symbol.isSymbol;

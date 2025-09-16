@@ -154,31 +154,6 @@ export class Stats {
   }
 
   /**
-   * Calculate sample standard deviation of an array
-   * 
-   * @param arr - Array of numbers
-   * @returns Sample standard deviation (using n-1 denominator)
-   * @throws {MathterError} When input is not a non-empty array
-   * 
-   * @example
-   * ```typescript
-   * Stats.sampleStdDev([1, 2, 3, 4, 5]); // → 1.58...
-   * Stats.sampleStdDev([10, 20, 30]); // → 10
-   * ```
-   */
-  public static sampleStdDev(arr: number[]): number {
-    if (!Array.isArray(arr) || arr.length === 0) {
-      throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
-    }
-
-    if (arr.length === 1) return 0;
-
-    const mean = Stats.mean(arr);
-    const variance = arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / (arr.length - 1);
-    return Math.sqrt(variance);
-  }
-
-  /**
    * Calculate variance of an array
    * 
    * @param arr - Array of numbers
@@ -200,30 +175,6 @@ export class Stats {
 
     const mean = Stats.mean(arr);
     return arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / arr.length;
-  }
-
-  /**
-   * Calculate sample variance of an array
-   * 
-   * @param arr - Array of numbers
-   * @returns Sample variance (using n-1 denominator)
-   * @throws {MathterError} When input is not a non-empty array
-   * 
-   * @example
-   * ```typescript
-   * Stats.sampleVariance([1, 2, 3, 4, 5]); // → 2.5
-   * Stats.sampleVariance([10, 20, 30]); // → 100
-   * ```
-   */
-  public static sampleVariance(arr: number[]): number {
-    if (!Array.isArray(arr) || arr.length === 0) {
-      throw new MathterError('Input must be a non-empty array', 'INVALID_INPUT');
-    }
-
-    if (arr.length === 1) return 0;
-
-    const mean = Stats.mean(arr);
-    return arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / (arr.length - 1);
   }
 
   /**
@@ -347,23 +298,6 @@ export class Stats {
   }
 
   /**
-   * Calculate interquartile range (IQR)
-   * 
-   * @param arr - Array of numbers
-   * @returns Interquartile range (Q3 - Q1)
-   * @throws {MathterError} When input is not a non-empty array
-   * 
-   * @example
-   * ```typescript
-   * Stats.iqr([1, 2, 3, 4, 5, 6, 7, 8, 9]); // → 5
-   * ```
-   */
-  public static iqr(arr: number[]): number {
-    const quartiles = Stats.quartiles(arr);
-    return quartiles.q3 - quartiles.q1;
-  }
-
-  /**
    * Calculate correlation coefficient between two arrays
    * 
    * @param x - First array of numbers
@@ -407,29 +341,6 @@ export class Stats {
     if (denominator === 0) return 0;
     
     return numerator / denominator;
-  }
-
-  /**
-   * Calculate all basic statistics for an array
-   * 
-   * @param arr - Array of numbers
-   * @returns Object containing all basic statistics
-   * @throws {MathterError} When input is not a non-empty array
-   * 
-   * @example
-   * ```typescript
-   * Stats.all([1, 2, 3, 4, 5]); // → { mean: 3, median: 3, mode: [1,2,3,4,5], range: 4, standardDeviation: 1.58..., variance: 2 }
-   * ```
-   */
-  public static all(arr: number[]): StatsResult {
-    return {
-      mean: Stats.mean(arr),
-      median: Stats.median(arr),
-      mode: Stats.mode(arr),
-      range: Stats.range(arr),
-      standardDeviation: Stats.stdDev(arr),
-      variance: Stats.variance(arr)
-    };
   }
 
   /**
@@ -523,5 +434,11 @@ export const range = Stats.range;
 export const stdDev = Stats.stdDev;
 export const variance = Stats.variance;
 export const sum = Stats.sum;
+export const product = Stats.product;
 export const min = Stats.min;
 export const max = Stats.max;
+export const correlation = Stats.correlation;
+export const quartiles = Stats.quartiles;
+export const percentileRank = Stats.percentileRank;
+export const zScore = Stats.zScore;
+export const percentile = Stats.percentile;

@@ -1,4 +1,4 @@
-import { PercentResult, MathterError } from './types';
+import { PercentResult, MathterError, PrimeFactors } from './types';
 
 // Helper function to check if number is integer
 const isInteger = (n: number): boolean => {
@@ -176,7 +176,7 @@ export class Number {
      * Number.Percent.fromXofY(50, 200); // → { value: 100, percentage: 50, originalValue: 200 }
      * ```
      */
-    public fromXofY: (x: number, y: number): PercentResult => {
+    fromXofY: (x: number, y: number): PercentResult => {
       if (x < 0 || y < 0) {
         throw new MathterError('Values must be non-negative', 'NEGATIVE_VALUE');
       }
@@ -203,7 +203,7 @@ export class Number {
      * Number.Percent.increase(50, 10); // → { value: 55, percentage: 10, originalValue: 50 }
      * ```
      */
-    public increase: (value: number, percentage: number): PercentResult => {
+    increase: (value: number, percentage: number): PercentResult => {
       if (value < 0 || percentage < 0) {
         throw new MathterError('Values must be non-negative', 'NEGATIVE_VALUE');
       }
@@ -232,7 +232,7 @@ export class Number {
      * Number.Percent.decrease(50, 10); // → { value: 45, percentage: 10, originalValue: 50 }
      * ```
      */
-    public decrease: (value: number, percentage: number): PercentResult => {
+    decrease: (value: number, percentage: number): PercentResult => {
       if (value < 0 || percentage < 0) {
         throw new MathterError('Values must be non-negative', 'NEGATIVE_VALUE');
       }
@@ -265,7 +265,7 @@ export class Number {
      * Number.Percent.change(200, 150); // → { value: 150, percentage: -25, originalValue: 200 }
      * ```
      */
-    public change: (a: number, b: number): PercentResult => {
+    change: (a: number, b: number): PercentResult => {
       if (a < 0 || b < 0) {
         throw new MathterError('Values must be non-negative', 'NEGATIVE_VALUE');
       }
@@ -283,35 +283,6 @@ export class Number {
       };
     }
   };
-
-  /**
-   * Check if number is prime
-   * 
-   * @param n - Number to check
-   * @returns True if the number is prime
-   * 
-   * @example
-   * ```typescript
-   * Number.isPrime(17); // → true
-   * Number.isPrime(15); // → false
-   * ```
-   */
-  public static isPrime(n: number): boolean {
-    if (!isInteger(n) || n < 2) {
-      return false;
-    }
-
-    if (n === 2) return true;
-    if (n % 2 === 0) return false;
-
-    for (let i = 3; i <= Math.sqrt(n); i += 2) {
-      if (n % i === 0) {
-        return false;
-      }
-    }
-
-    return true;
-  }
 
   /**
    * Check if number is perfect square
@@ -349,107 +320,142 @@ export class Number {
     return isInteger(cbrt);
   }
 
-  /**
-   * Get factorial of a number
-   * 
-   * @param n - Non-negative integer
-   * @returns Factorial of n (n!)
-   * @throws {MathterError} When n is negative or too large (>170)
-   * 
-   * @example
-   * ```typescript
-   * Number.factorial(5); // → 120
-   * Number.factorial(0); // → 1
-   * ```
-   */
-  public static factorial(n: number): number {
-    if (!isInteger(n) || n < 0) {
-      throw new MathterError('Number must be a non-negative integer', 'INVALID_INPUT');
-    }
+  public static Prime = {
+    /**
+     * Check if a number is prime
+     * 
+     * @param n - Number to check
+     * @returns True if the number is prime
+     * 
+     * @example
+     * ```typescript
+     * Prime.is(17); // → true
+     * Prime.is(15); // → false
+     * ```
+     */
+    is: (n: number): boolean => {
+      if (!isInteger(n) || n < 2) {
+        return false;
+      }
 
-    if (n > 170) {
-      throw new MathterError('Number too large for factorial calculation', 'NUMBER_TOO_LARGE');
-    }
+      if (n === 2) return true;
+      if (n % 2 === 0) return false;
 
-    if (n === 0 || n === 1) return 1;
+      // Check odd divisors up to sqrt(n)
+      for (let i = 3; i <= Math.sqrt(n); i += 2) {
+        if (n % i === 0) {
+          return false;
+        }
+      }
 
-    let result = 1;
-    for (let i = 2; i <= n; i++) {
-      result *= i;
-    }
+      return true;
+    },
 
-    return result;
-  }
+    /**
+     * Find the next prime number after n
+     * 
+     * @param n - Starting number
+     * @returns Next prime number after n
+     * @throws {MathterError} When n is not an integer
+     * 
+     * @example
+     * ```typescript
+     * Prime.next(13); // → 17
+     * Prime.next(1); // → 2
+     * ```
+     */
+    next: (n: number): number => {
+      if (!isInteger(n)) {
+        throw new MathterError('Input must be an integer', 'NOT_INTEGER');
+      }
 
-  /**
-   * Calculate absolute value
-   * 
-   * @param n - Number
-   * @returns Absolute value of n
-   * 
-   * @example
-   * ```typescript
-   * Number.abs(-5); // → 5
-   * Number.abs(3); // → 3
-   * ```
-   */
-  public static abs(n: number): number {
-    return Math.abs(n);
-  }
+      if (n < 2) return 2;
 
-  /**
-   * Calculate square root
-   * 
-   * @param n - Non-negative number
-   * @returns Square root of n
-   * @throws {MathterError} When n is negative
-   * 
-   * @example
-   * ```typescript
-   * Number.sqrt(16); // → 4
-   * Number.sqrt(25); // → 5
-   * ```
-   */
-  public static sqrt(n: number): number {
-    if (n < 0) {
-      throw new MathterError('Cannot calculate square root of negative number', 'NEGATIVE_SQRT');
-    }
+      let candidate = n + 1;
+      while (!Number.Prime.is(candidate)) {
+        candidate++;
+      }
 
-    return Math.sqrt(n);
-  }
+      return candidate;
+    },
 
-  /**
-   * Calculate cube root
-   * 
-   * @param n - Number
-   * @returns Cube root of n
-   * 
-   * @example
-   * ```typescript
-   * Number.cbrt(27); // → 3
-   * Number.cbrt(-8); // → -2
-   * ```
-   */
-  public static cbrt(n: number): number {
-    return Math.cbrt(n);
-  }
+    /**
+     * Find the previous prime number before n
+     * 
+     * @param n - Starting number
+     * @returns Previous prime number before n
+     * @throws {MathterError} When n is not an integer or no previous prime exists
+     * 
+     * @example
+     * ```typescript
+     * Prime.previous(17); // → 13
+     * Prime.previous(3); // → 2
+     * ```
+     */
+    previous: (n: number): number => {
+      if (!isInteger(n)) {
+        throw new MathterError('Input must be an integer', 'NOT_INTEGER');
+      }
 
-  /**
-   * Calculate power
-   * 
-   * @param base - Base number
-   * @param exponent - Exponent
-   * @returns base raised to the power of exponent
-   * 
-   * @example
-   * ```typescript
-   * Number.pow(2, 3); // → 8
-   * Number.pow(5, 2); // → 25
-   * ```
-   */
-  public static pow(base: number, exponent: number): number {
-    return Math.pow(base, exponent);
-  }
+      if (n <= 2) {
+        throw new MathterError('No prime number exists before 2', 'NO_PREVIOUS_PRIME');
+      }
+
+      let candidate = n - 1;
+      while (candidate >= 2 && !Number.Prime.is(candidate)) {
+        candidate--;
+      }
+
+      if (candidate < 2) {
+        throw new MathterError('No prime number found', 'NO_PRIME_FOUND');
+      }
+
+      return candidate;
+    },
+
+    /**
+     * Get prime factors of a number
+     * 
+     * @param n - Number to factorize
+     * @returns Object with prime factors and their exponents
+     * @throws {MathterError} When n is not an integer greater than 1
+     * 
+     * @example
+     * ```typescript
+     * Prime.factors(60); // → { 2: 2, 3: 1, 5: 1 }
+     * Prime.factors(17); // → { 17: 1 }
+     * ```
+     */
+    factors: (n: number): PrimeFactors => {
+      if (!isInteger(n) || n < 2) {
+        throw new MathterError('Number must be an integer greater than 1', 'INVALID_INPUT');
+      }
+
+      const factors: PrimeFactors = {};
+      let num = n;
+
+      // Check for factor 2
+      while (num % 2 === 0) {
+        factors[2] = (factors[2] || 0) + 1;
+        num /= 2;
+      }
+
+      // Check for odd factors
+      for (let i = 3; i <= Math.sqrt(num); i += 2) {
+        while (num % i === 0) {
+          factors[i] = (factors[i] || 0) + 1;
+          num /= i;
+        }
+      }
+
+      // If remaining number is greater than 1, it's a prime factor
+      if (num > 1) {
+        factors[num] = (factors[num] || 0) + 1;
+      }
+
+      return factors;
+    },
+  };
 }
 
 // Convenience functions for direct import
@@ -460,3 +466,7 @@ export const isOdd = Number.isOdd;
 export const roundTo = Number.roundTo;
 export const isPerfectSquare = Number.isPerfectSquare;
 export const isPerfectCube = Number.isPerfectCube;
+export const isPrime = Number.Prime.is;
+export const nextPrime = Number.Prime.next;
+export const previousPrime = Number.Prime.previous;
+export const primeFactors = Number.Prime.factors;

@@ -149,52 +149,6 @@ export class Roman {
     const roman = str.toUpperCase().trim();
     return ROMAN_PATTERN.test(roman);
   }
-
-  /**
-   * Get all Roman symbols
-   * 
-   * @returns Array of all valid Roman symbols
-   * 
-   * @example
-   * ```typescript
-   * Roman.getSymbols(); // → ['I', 'V', 'X', 'L', 'C', 'D', 'M']
-   * ```
-   */
-  public static getSymbols(): RomanSymbol[] {
-    return Object.keys(ROMAN_TO_VALUE) as RomanSymbol[];
-  }
-
-  /**
-   * Get value of a Roman symbol
-   * 
-   * @param symbol - Roman symbol
-   * @returns Numeric value of the symbol
-   * 
-   * @example
-   * ```typescript
-   * Roman.getSymbolValue('M'); // → 1000
-   * Roman.getSymbolValue('I'); // → 1
-   * ```
-   */
-  public static getSymbolValue(symbol: RomanSymbol): RomanValue {
-    return ROMAN_TO_VALUE[symbol];
-  }
-
-  /**
-   * Get Roman symbol for a value
-   * 
-   * @param value - Numeric value
-   * @returns Roman symbol for the value
-   * 
-   * @example
-   * ```typescript
-   * Roman.getValueSymbol(1000); // → 'M'
-   * Roman.getValueSymbol(1); // → 'I'
-   * ```
-   */
-  public static getValueSymbol(value: RomanValue): RomanSymbol {
-    return VALUE_TO_ROMAN[value];
-  }
 }
 
 // Convenience functions for direct import

@@ -297,16 +297,8 @@ export class Logic {
       .replace(/\bXNOR\b/gi, '!(');
 
     // Handle NAND, NOR, XNOR (need to close parentheses)
-    const nandCount = (cleanExpr.match(/!\(/g) || []).length;
-    const openParens = (cleanExpr.match(/\(/g) || []).length;
-    const closeParens = (cleanExpr.match(/\)/g) || []).length;
-    
-    if (nandCount > 0) {
-      // For NAND: !(A && B) -> !(A && B)
-      // For NOR: !(A || B) -> !(A || B)
-      // For XNOR: !(A ^ B) -> !(A ^ B)
-      cleanExpr = cleanExpr.replace(/!\(([^)]+)\)/g, '!($1)');
-    }
+    // Note: The current implementation replaces NAND/NOR/XNOR with !( but doesn't handle
+    // the closing parentheses properly. This is a known limitation.
 
     // Replace variable names with their values
     for (const [varName, value] of Object.entries(vars)) {

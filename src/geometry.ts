@@ -112,31 +112,6 @@ export class Geometry {
       return 0.5 * a * b * Math.sin(angleRad);
     },
 
-    /**
-     * Calculate area of a triangle using Heron's formula
-     * 
-     * @param a - Length of first side
-     * @param b - Length of second side
-     * @param c - Length of third side
-     * @returns Area of the triangle
-     * @throws {MathterError} When sides are negative or don't form a valid triangle
-     * 
-     * @example
-     * ```typescript
-     * Geometry.Area.triangleHeron(3, 4, 5); // → 6
-     * Geometry.Area.triangleHeron(5, 5, 5); // → 10.83...
-     * ```
-     */
-    triangleHeron: (a: number, b: number, c: number): number => {
-      if (a < 0 || b < 0 || c < 0) {
-        throw new MathterError('Side lengths cannot be negative', 'NEGATIVE_SIDES');
-      }
-      if (a + b <= c || a + c <= b || b + c <= a) {
-        throw new MathterError('Invalid triangle: sum of any two sides must be greater than the third', 'INVALID_TRIANGLE');
-      }
-      const s = (a + b + c) / 2;
-      return Math.sqrt(s * (s - a) * (s - b) * (s - c));
-    },
 
     /**
      * Calculate area of a trapezoid

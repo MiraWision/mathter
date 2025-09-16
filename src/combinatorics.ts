@@ -1,4 +1,4 @@
-import { PermutationResult, CombinationResult, MathterError } from './types';
+import { MathterError } from './types';
 
 // Utility function for integer check (compatible with older Node.js versions)
 const isInteger = (n: number): boolean => {
@@ -16,11 +16,17 @@ const isInteger = (n: number): boolean => {
  * // Calculate factorial
  * Combinatorics.factorial(5); // → 120
  * 
- * // Calculate permutations
- * Combinatorics.permutations(5, 3); // → { count: 60 }
+ * // Calculate permutations count
+ * Combinatorics.permutationsCount(5, 3); // → 60
+ * 
+ * // Generate permutations
+ * Combinatorics.permutations(['a', 'b', 'c'], 2); // → [['a', 'b'], ['a', 'c'], ['b', 'a'], ...]
+ * 
+ * // Calculate combinations count
+ * Combinatorics.combinationsCount(5, 3); // → 10
  * 
  * // Generate combinations
- * Combinatorics.generateCombinations(['a', 'b', 'c'], 2); // → [['a', 'b'], ['a', 'c'], ['b', 'c']]
+ * Combinatorics.combinations(['a', 'b', 'c'], 2); // → [['a', 'b'], ['a', 'c'], ['b', 'c']]
  * ```
  */
 export class Combinatorics {
@@ -57,22 +63,22 @@ export class Combinatorics {
   }
 
   /**
-   * Calculate permutations P(n) or P(n, r)
+   * Calculate permutations count P(n) or P(n, r)
    * P(n) = n! (all permutations of n elements)
    * P(n, r) = n! / (n - r)! (permutations of r elements from n)
    * 
    * @param n - Total number of elements
    * @param r - Optional number of elements to arrange (if not provided, uses all n elements)
-   * @returns Object containing the count of permutations
+   * @returns Count of permutations
    * @throws {MathterError} When n or r are negative, or r > n
    * 
    * @example
    * ```typescript
-   * Combinatorics.permutations(5); // → { count: 120 } (5!)
-   * Combinatorics.permutations(5, 3); // → { count: 60 } (P(5,3))
+   * Combinatorics.permutationsCount(5); // → 120 (5!)
+   * Combinatorics.permutationsCount(5, 3); // → 60 (P(5,3))
    * ```
    */
-  public static permutations(n: number, r?: number): PermutationResult {
+  public static permutationsCount(n: number, r?: number): number {
     if (!isInteger(n) || n < 0) {
       throw new MathterError('n must be a non-negative integer', 'INVALID_INPUT');
     }
@@ -86,30 +92,28 @@ export class Combinatorics {
         throw new MathterError('r cannot be greater than n', 'INVALID_RANGE');
       }
 
-      const count = Combinatorics.factorial(n) / Combinatorics.factorial(n - r);
-      return { count };
+      return Combinatorics.factorial(n) / Combinatorics.factorial(n - r);
     } else {
-      const count = Combinatorics.factorial(n);
-      return { count };
+      return Combinatorics.factorial(n);
     }
   }
 
   /**
-   * Calculate combinations C(n, r)
+   * Calculate combinations count C(n, r)
    * C(n, r) = n! / (r! * (n - r)!)
    * 
    * @param n - Total number of elements
    * @param r - Number of elements to choose
-   * @returns Object containing the count of combinations
+   * @returns Count of combinations
    * @throws {MathterError} When n or r are negative, or r > n
    * 
    * @example
    * ```typescript
-   * Combinatorics.combinations(5, 3); // → { count: 10 } (C(5,3))
-   * Combinatorics.combinations(4, 2); // → { count: 6 } (C(4,2))
+   * Combinatorics.combinationsCount(5, 3); // → 10 (C(5,3))
+   * Combinatorics.combinationsCount(4, 2); // → 6 (C(4,2))
    * ```
    */
-  public static combinations(n: number, r: number): CombinationResult {
+  public static combinationsCount(n: number, r: number): number {
     if (!isInteger(n) || n < 0) {
       throw new MathterError('n must be a non-negative integer', 'INVALID_INPUT');
     }
@@ -123,7 +127,7 @@ export class Combinatorics {
     }
 
     if (r === 0 || r === n) {
-      return { count: 1 };
+      return 1;
     }
 
     // Use the property C(n, r) = C(n, n-r) to minimize calculations
@@ -136,8 +140,7 @@ export class Combinatorics {
       denominator *= (i + 1);
     }
 
-    const count = numerator / denominator;
-    return { count };
+    return numerator / denominator;
   }
 
   /**
@@ -150,11 +153,11 @@ export class Combinatorics {
    * 
    * @example
    * ```typescript
-   * Combinatorics.generatePermutations(['a', 'b', 'c']); // → [['a','b','c'], ['a','c','b'], ...]
-   * Combinatorics.generatePermutations(['a', 'b', 'c'], 2); // → [['a','b'], ['a','c'], ['b','a'], ...]
+   * Combinatorics.permutations(['a', 'b', 'c']); // → [['a','b','c'], ['a','c','b'], ...]
+   * Combinatorics.permutations(['a', 'b', 'c'], 2); // → [['a','b'], ['a','c'], ['b','a'], ...]
    * ```
    */
-  public static generatePermutations<T>(arr: T[], r?: number): T[][] {
+  public static permutations<T>(arr: T[], r?: number): T[][] {
     if (!Array.isArray(arr)) {
       throw new MathterError('Input must be an array', 'INVALID_INPUT');
     }
@@ -179,10 +182,10 @@ export class Combinatorics {
    * 
    * @example
    * ```typescript
-   * Combinatorics.generateCombinations(['a', 'b', 'c'], 2); // → [['a','b'], ['a','c'], ['b','c']]
+   * Combinatorics.combinations(['a', 'b', 'c'], 2); // → [['a','b'], ['a','c'], ['b','c']]
    * ```
    */
-  public static generateCombinations<T>(arr: T[], r: number): T[][] {
+  public static combinations<T>(arr: T[], r: number): T[][] {
     if (!Array.isArray(arr)) {
       throw new MathterError('Input must be an array', 'INVALID_INPUT');
     }
@@ -199,83 +202,6 @@ export class Combinatorics {
     return result;
   }
 
-  /**
-   * Calculate Stirling numbers of the first kind
-   * 
-   * @param n - Total number of elements
-   * @param k - Number of cycles
-   * @returns Stirling number of the first kind s(n,k)
-   * @throws {MathterError} When n or k are negative
-   * 
-   * @example
-   * ```typescript
-   * Combinatorics.stirlingFirst(4, 2); // → 11
-   * ```
-   */
-  public static stirlingFirst(n: number, k: number): number {
-    if (!isInteger(n) || !isInteger(k) || n < 0 || k < 0) {
-      throw new MathterError('Both n and k must be non-negative integers', 'INVALID_INPUT');
-    }
-
-    if (k > n) return 0;
-    if (k === 0) return n === 0 ? 1 : 0;
-    if (k === n) return 1;
-
-    // Use recurrence relation: s(n,k) = s(n-1,k-1) + (n-1)*s(n-1,k)
-    const memo: number[][] = [];
-    for (let i = 0; i <= n; i++) {
-      memo[i] = new Array(k + 1).fill(0);
-    }
-
-    memo[0][0] = 1;
-
-    for (let i = 1; i <= n; i++) {
-      for (let j = 1; j <= Math.min(i, k); j++) {
-        memo[i][j] = memo[i - 1][j - 1] + (i - 1) * memo[i - 1][j];
-      }
-    }
-
-    return memo[n][k];
-  }
-
-  /**
-   * Calculate Stirling numbers of the second kind
-   * 
-   * @param n - Total number of elements
-   * @param k - Number of non-empty subsets
-   * @returns Stirling number of the second kind S(n,k)
-   * @throws {MathterError} When n or k are negative
-   * 
-   * @example
-   * ```typescript
-   * Combinatorics.stirlingSecond(4, 2); // → 7
-   * ```
-   */
-  public static stirlingSecond(n: number, k: number): number {
-    if (!isInteger(n) || !isInteger(k) || n < 0 || k < 0) {
-      throw new MathterError('Both n and k must be non-negative integers', 'INVALID_INPUT');
-    }
-
-    if (k > n) return 0;
-    if (k === 0) return n === 0 ? 1 : 0;
-    if (k === n) return 1;
-
-    // Use recurrence relation: S(n,k) = S(n-1,k-1) + k*S(n-1,k)
-    const memo: number[][] = [];
-    for (let i = 0; i <= n; i++) {
-      memo[i] = new Array(k + 1).fill(0);
-    }
-
-    memo[0][0] = 1;
-
-    for (let i = 1; i <= n; i++) {
-      for (let j = 1; j <= Math.min(i, k); j++) {
-        memo[i][j] = memo[i - 1][j - 1] + j * memo[i - 1][j];
-      }
-    }
-
-    return memo[n][k];
-  }
 
   // Private helper methods
   private static generateAllPermutations<T>(arr: T[]): T[][] {
@@ -334,7 +260,7 @@ export class Combinatorics {
 }
 
 // Convenience functions for direct import
+export const permutationsCount = Combinatorics.permutationsCount;
+export const combinationsCount = Combinatorics.combinationsCount;
 export const permutations = Combinatorics.permutations;
 export const combinations = Combinatorics.combinations;
-export const generatePermutations = Combinatorics.generatePermutations;
-export const generateCombinations = Combinatorics.generateCombinations;

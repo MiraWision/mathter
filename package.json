@@ -1,5 +1,5 @@
 {
-  "name": "@mathter/core",
+  "name": "@mirawision/mathter",
   "version": "1.0.0",
   "description": "A comprehensive mathematical library for TypeScript, providing functionalities for unit conversion, number manipulation, geometry, statistics, and various mathematical operations.",
   "main": "index.js",
@@ -32,10 +32,6 @@
     "./combinatorics": {
       "types": "./combinatorics.d.ts",
       "default": "./combinatorics.js"
-    },
-    "./prime": {
-      "types": "./prime.d.ts",
-      "default": "./prime.js"
     },
     "./geometry": {
       "types": "./geometry.d.ts",
@@ -80,15 +76,15 @@
     "mathter",
     "typescript"
   ],
-  "author": "Mathter Team",
+  "author": "MiraWision",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mathter/core.git"
+    "url": "https://github.com/MiraWision/mathter.git"
   },
   "bugs": {
-    "url": "https://github.com/mathter/core/issues"
+    "url": "https://github.com/MiraWision/mathter/issues"
   },
-  "homepage": "https://mathter.dev",
+  "homepage": "https://mirawision.github.io/mathter",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "29.5.12",

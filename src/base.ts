@@ -159,52 +159,6 @@ export class Base {
   }
 
   /**
-   * Convert decimal to octal
-   * 
-   * @param n - Non-negative integer to convert
-   * @returns Octal representation as string
-   * @throws {MathterError} When input is not a non-negative integer
-   * 
-   * @example
-   * ```typescript
-   * Base.decimalToOctal(64); // → '100'
-   * Base.decimalToOctal(8); // → '10'
-   * ```
-   */
-  public static decimalToOctal(n: number): string {
-    if (!isInteger(n) || n < 0) {
-      throw new MathterError('Input must be a non-negative integer', 'INVALID_INPUT');
-    }
-
-    return Base.fromDecimal(n, 8);
-  }
-
-  /**
-   * Convert octal to decimal
-   * 
-   * @param octal - Octal string to convert
-   * @returns Decimal number
-   * @throws {MathterError} When input is not a valid octal string
-   * 
-   * @example
-   * ```typescript
-   * Base.octalToDecimal('100'); // → 64
-   * Base.octalToDecimal('10'); // → 8
-   * ```
-   */
-  public static octalToDecimal(octal: string): number {
-    if (!octal || typeof octal !== 'string') {
-      throw new MathterError('Input must be a non-empty string', 'INVALID_INPUT');
-    }
-
-    if (!Base.isValidInBase(octal, 8)) {
-      throw new MathterError(`'${octal}' is not a valid octal number`, 'INVALID_OCTAL');
-    }
-
-    return Base.toDecimal(octal, 8);
-  }
-
-  /**
    * Check if a value is valid in given base
    * 
    * @param value - String to validate
@@ -291,6 +245,4 @@ export const decimalToBinary = Base.decimalToBinary;
 export const binaryToDecimal = Base.binaryToDecimal;
 export const decimalToHex = Base.decimalToHex;
 export const hexToDecimal = Base.hexToDecimal;
-export const decimalToOctal = Base.decimalToOctal;
-export const octalToDecimal = Base.octalToDecimal;
 export const isValidInBase = Base.isValidInBase;

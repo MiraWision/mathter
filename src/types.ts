@@ -87,17 +87,6 @@ export interface PrimeFactors {
   [prime: number]: number;
 }
 
-// Combinatorics types
-export interface PermutationResult {
-  count: number;
-  permutations?: string[][];
-}
-
-export interface CombinationResult {
-  count: number;
-  combinations?: string[][];
-}
-
 // Error types
 export class MathterError extends Error {
   constructor(message: string, public code?: string) {
